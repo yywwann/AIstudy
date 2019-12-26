@@ -17,7 +17,9 @@
     - MNIST nn
 
 # homework 4
-
+- part1
+- part2
+- part3
     
         
 * [ ] homework 4
