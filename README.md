@@ -20,7 +20,14 @@
 - part1
 - part2
 - part3
+DNN
+深度神经网络    
     
-        
-* [ ] homework 4
-* [ ] homework 5
+# homework 5
+CNN
+卷积神经网络
+15000次跑了10个小时
+Accyracy:87.35%
+loss:0.3533
+lr:0.0468
+
