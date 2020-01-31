@@ -17,7 +17,7 @@ loss = tf.reduce_mean(tf.square(y-y_data))  # 预测的y与真实的y的差别
 optimizer = tf.train.GradientDescentOptimizer(0.5)  # 优化器 减少loss
 train = optimizer.minimize(loss)
 
-init = tf.initialize_all_variables()  # 初始化之前创建的变量
+init = tf.global_variables_initializer()  # 初始化之前创建的变量
 # create tensorflow structure end
 
 sess = tf.Session()
