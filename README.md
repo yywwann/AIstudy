@@ -13,7 +13,19 @@
 - 利用 TensorFlow 将苹果变成橘子
 
 # Tensorflow学习
-- 训练 y = 0.1x + 0.3
+- 1 练习1 训练 y = 0.1*x + 0.3
+- 2 Session 会话控制
+- 3 Variable 变量
+- 4 Placeholder 传入值
+- 5 建造神经网络
+    - 添加层 def add_layer()
+    - 导入数据
+    - 搭建网络
+    - 训练
+    - 结果可视化
+    - 加速神经网络训练 (Speed Up Training)
+    - 优化器 optimizer
+
 
 # 爬虫学习
 - 用 Python 登录网页
