@@ -328,5 +328,84 @@ for i in range(1000):
 
 ![](https://morvanzhou.github.io/static/results/tensorflow/3_4_1.png)
 
+## 6 Tensorboard 可视化
+
+使用`with tf.name_scope('inputs')`可以将`xs`和`ys`包含进来，形成一个大的图层，图层的名字就是`with tf.name_scope()`方法里的参数。
+
+```python
+with tf.name_scope('inputs'):
+    # define placeholder for inputs to network
+    xs = tf.placeholder(tf.float32, [None, 1])
+    ys = tf.placeholder(tf.float32, [None, 1])
+```
+
+我们需要使用 `tf.summary.FileWriter()` 将上面‘绘画’出的图保存到一个目录中，以方便后期在浏览器中可以浏览。 这个方法中的第二个参数需要使用`sess.graph` ， 因此我们需要把这句话放在获取`session`的后面。 这里的`graph`是将前面定义的框架信息收集起来，然后放在`logs/`目录下面。
+
+
+```python
+init = tf.global_variables_initializer()
+sess = tf.Session()
++ writer = tf.summary.FileWriter("logs/", sess.graph)
+sess.run(init)
+```
+
+### 在 layer 中为 Weights, biases 设置变化图表
+我们在 `add_layer()` 方法中添加一个参数 `n_layer`,用来标识层数, 并且用变量 `layer_name` 代表其每层的名名称, 代码如下:
+
+```python
+layer_name='layer%s'%n_layer  ## define a new var
+```
+
+接下来,我们层中的`Weights`设置变化图, tensorflow中提供了`tf.summary.histogram()`方法,用来绘制图片, 第一个参数是图表的名称, 第二个参数是图表要记录的变量
+
+
+```python
+with tf.name_scope('layer'):
+         with tf.name_scope('weights'):
+              Weights= tf.Variable(tf.random_normal([in_size, out_size]),name='W')
+            + tf.summary.histogram(layer_name + '/weights', Weights) # tensorflow >= 0.12
+```
+
+### 设置loss的变化图
+loss是在tesnorBorad 的event下面的, 这是由于我们使用的是`tf.summary.scalar()` 方法.
+
+
+```python
+with tf.name_scope('loss'):
+     loss= tf.reduce_mean(tf.reduce_sum(
+              tf.square(ys- prediction), reduction_indices=[1]))
+   + tf.summary.scalar('loss', loss)
+```
+
+接下来， 开始合并打包。 tf.summary.merge_all() 方法会对我们所有的 summaries 合并到一起. 因此在原有代码片段中添加：
+
+
+```python
+sess= tf.Session()
+
+# merged= tf.merge_all_summaries()    # tensorflow < 0.12
+merged = tf.summary.merge_all() # tensorflow >= 0.12
+
+# writer = tf.train.SummaryWriter('logs/', sess.graph)    # tensorflow < 0.12
+writer = tf.summary.FileWriter("logs/", sess.graph) # tensorflow >=0.12
+
+# sess.run(tf.initialize_all_variables()) # tf.initialize_all_variables() # tf 马上就要废弃这种写法
+sess.run(tf.global_variables_initializer())  # 替换成这样就好
+
+for i in range(1000):
+   sess.run(train_step, feed_dict={xs:x_data, ys:y_data})
+   if i%50 == 0:
+      rs = sess.run(merged,feed_dict={xs:x_data,ys:y_data})
+      writer.add_summary(rs, i)
+```
+
+在 tensorboard 中查看效果
+
+
+```shell
+tensorboard --logdir logs
+```
+
+
 
 

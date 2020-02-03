@@ -25,6 +25,7 @@
     - 结果可视化
     - 加速神经网络训练 (Speed Up Training)
     - 优化器 optimizer
+- 6 Tensorboard 可视化
 
 
 # 爬虫学习
