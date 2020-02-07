@@ -4,7 +4,7 @@ python3.7
 tensorflow 1.8.0 (随便选的,不会2.0)
 远古教程,会有远古代码
 
-# Tensorflow 基础构架
+
 ## 0 处理结构
 Tensorflow 首先要定义神经网络的结构, 然后再把数据放入结构当中去运算和 training.
 ![](https://www.tensorflow.org/images/tensors_flowing.gif)
@@ -405,6 +405,104 @@ for i in range(1000):
 ```shell
 tensorboard --logdir logs
 ```
+
+## 7 Classification 分类学习
+
+### MNIST 数据
+首先准备数据（MNIST库）
+> 现在这种方法已经被弃用了,凑合用用先
+> 
+
+```python
+from tensorflow.examples.tutorials.mnist import input_data
+mnist = input_data.read_data_sets('MNIST_data', one_hot=True)
+```
+
+MNIST库是手写体数字库，差不多是这样子的
+
+![](https://morvanzhou.github.io/static/results/tensorflow/5_01_1.png)
+
+数据中包含55000张训练图片，每张图片的分辨率是28×28，所以我们的训练网络输入应该是28×28=784个像素数据。
+
+### 搭建网络
+
+每张图片大小为`28 * 28 = 784`
+每张图片都表示一个数字，所以我们的输出是数字0到9，共10类。
+调用add_layer函数搭建一个最简单的训练网络结构，只有输入层和输出层。
+
+```python
+xs = tf.placeholder(tf.float32, [None, 784])  # 28x28
+ys = tf.placeholder(tf.float32, [None, 10])
+prediction = add_layer(xs, 784, 10, activation_function=tf.nn.softmax)
+```
+
+其中输入数据是784个特征，输出数据是10个特征，激励采用softmax函数，网络结构图是这样子的
+
+![](https://morvanzhou.github.io/static/results/tensorflow/5_01_2.png)
+
+### Cross entropy loss
+loss函数（即最优化目标函数）选用交叉熵函数。交叉熵用来衡量预测值和真实值的相似程度，如果完全相同，它们的交叉熵等于零。
+
+```python
+cross_entropy = tf.reduce_mean(-tf.reduce_sum(ys * tf.log(prediction),
+reduction_indices=[1])) # loss
+```
+
+train方法（最优化算法）采用梯度下降法。
+
+```python
+train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
+```
+
+### 训练
+现在开始train，每次只取100张图片，免得数据太多训练太慢。
+每训练50次输出一下预测精度
+
+```python
+def compute_accuracy(v_xs, v_ys):
+    global prediction
+    y_pre = sess.run(prediction, feed_dict={xs: v_xs})
+    correct_prediction = tf.equal(tf.argmax(y_pre,1), tf.argmax(v_ys,1))  # 比较预测和真实是否相同
+    accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))  # 计算有多少对的有多少是错的
+    result = sess.run(accuracy, feed_dict={xs: v_xs, ys: v_ys})
+    return result
+
+init = tf.global_variables_initializer()
+sess = tf.Session()
+sess.run(init)
+
+
+for i in range(1000):
+    batch_xs, batch_ys = mnist.train.next_batch(100)
+    sess.run(train_step, feed_dict={xs: batch_xs, ys: batch_ys})
+    if i % 50 == 0:
+        print(compute_accuracy(mnist.test.images, mnist.test.labels))
+
+
+sess.close()
+```
+
+## 8 Dropout 解决 overfitting
+
+
+随机忽略
+```python
+# dropout net
+d1 = tf.layers.dense(tf_x, N_HIDDEN, tf.nn.relu)
+d1 = tf.layers.dropout(d1, rate=0.5, training=tf_is_training)   # drop out 50% of inputs
+d2 = tf.layers.dense(d1, N_HIDDEN, tf.nn.relu)
+d2 = tf.layers.dropout(d2, rate=0.5, training=tf_is_training)   # drop out 50% of inputs
+d_out = tf.layers.dense(d2, 1)
+d_loss = tf.losses.mean_squared_error(tf_y, d_out)
+d_train = tf.train.AdamOptimizer(LR).minimize(d_loss)
+```
+
+![](http://ultronxr-oss-02.oss-cn-shenzhen.aliyuncs.com/cdn/img/nbutacm/tfstudy_8_1.png)
+
+## 9 CNN 卷积神经网络
+
+## 10 Saver 保存读取
+
 
 
 

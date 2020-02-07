@@ -26,6 +26,10 @@
     - 加速神经网络训练 (Speed Up Training)
     - 优化器 optimizer
 - 6 Tensorboard 可视化
+- 7 Classification 分类学习
+- 8 Dropout 解决 overfitting
+- 9 CNN 卷积神经网络
+- 10 Saver 保存读取
 
 
 # 爬虫学习
