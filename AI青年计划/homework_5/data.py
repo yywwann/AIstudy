@@ -18,11 +18,11 @@ def _print_download_progress(count, block_size, total_size):  # 输出下载过�
     sys.stdout.flush()
 
 
-def maybe_download_and_extract():  # 下载并提取数据
-    main_directory = "./dataSet/"  # 主路径
-    cifar_10_directory = main_directory + "cifar_10/"  # cifar_10的路径
-    if not os.path.exists(main_directory):  # 判断所给路径是否存在
-        os.makedirs(main_directory)  # 路径不存在则创建新的目录
+# def maybe_download_and_extract():  # 下载并提取数据
+#     main_directory = "./dataSet/"  # 主路径
+#     cifar_10_directory = main_directory + "cifar_10/"  # cifar_10的路径
+#     if not os.path.exists(main_directory):  # 判断所给路径是否存在
+#         os.makedirs(main_directory)  # 路径不存在则创建新的目录
 
 
 def maybe_download_and_extract():  # 下载并提取数据

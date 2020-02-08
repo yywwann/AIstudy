@@ -36,9 +36,9 @@ def loadData(): # 定义一个 loadData 函数
 
 
 # 申请模型输入输出的占位符
-def create_placeholder(n_x = 784, n_y = 0): # 定义一个 create_placeholder  函数
-    X = tf.placeholder(tf.float32, shape = [None,n_x], name = 'X')   # 调用tf.placeholder函数，tensorflow 中定义 X
-    Y = tf.placeholder(tf.float32, shape = [None,], name = 'Y')  # 调用tf.placeholder函数，tensorflow 中定义 Y
+def create_placeholder(n_x=784, n_y=0): # 定义一个 create_placeholder  函数
+    X = tf.placeholder(tf.float32, shape=[None, n_x], name='X')   # 调用tf.placeholder函数，tensorflow 中定义 X
+    Y = tf.placeholder(tf.float32, shape=[None, ], name='Y')  # 调用tf.placeholder函数，tensorflow 中定义 Y
     return X, Y  # 返回 X 和 Y　的数值
 
 
@@ -46,14 +46,14 @@ def create_placeholder(n_x = 784, n_y = 0): # 定义一个 create_placeholder  �
 def initialize_parameters(): # 定义一个 initialize_parameters 函数
     W = tf.Variable(tf.zeros([784, 1]))  # 调用tf.Variable函数，设置模型参数W，W的维度为[784,1]，且初始化为0
     b = tf.Variable(tf.zeros([1, 1]))  # 调用tf.Variable函数，设置模型参数b，b的维度为[1  ,1],且初始化为0
-    parameters={'W': W,  # 参数权重 W
+    parameters = {'W': W,  # 参数权重 W
                 'b': b}  # 参数偏置 b
     return parameters  # 返回参数
 
 
 # 将标签转换为one-hot形式，本例中未用到该函数，是因为tensorflow中封装了one-hot功能
 def convert_one_hot(Y, C):  # 定义一个 convert_one_hot 函数
-    one_hot=np.eye(C)[Y.reshape(-1)].T  # 初始化 one_hot 为对角矩阵
+    one_hot = np.eye(C)[Y.reshape(-1)].T  # 初始化 one_hot 为对角矩阵
     return one_hot  # 返回 one_hot 
 
 
@@ -79,8 +79,8 @@ def compute_cost(y_, y, W):  # 定义一个 compute_cost 函数
 
 # 模型搭建、训练、存储
 def model(mnist, Num): # 定义一个  model 函数
-    x,y_ = create_placeholder(784, 0) # 调用 create_placeholder 函数，初始化  x,y_ , 28 * 28 = 784
-    parameters = initialize_parameters() # 调用 initialize_parameters 函数， 初始化 参数
+    x, y_ = create_placeholder(784, 0)  # 调用 create_placeholder 函数，初始化  x,y_ , 28 * 28 = 784
+    parameters = initialize_parameters()  # 调用 initialize_parameters 函数， 初始化 参数
     A1 = forward_propagation(x, parameters)   # 调用 forward_propagation 函数，实现前向反馈
 
     # 设置learning rate decay策略，随着迭代次数的增加，学习率成指数逐渐减小，

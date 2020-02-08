@@ -2,8 +2,15 @@
 - homework1
 - homework2
 - homework3
+    - MNIST
 - homework4
+    - 狗,飞机 二分类
 - homework5
+    - CIFAR10 CNN的前馈传播
+- homework6
+    - ImageNet
+- hoemwork7
+    - PASCAL VOC 
 
 # GAN:实战生成对抗网络
 - 使用GAN生成MNIST手写数字
